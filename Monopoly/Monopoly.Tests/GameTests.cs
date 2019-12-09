@@ -4,10 +4,16 @@ namespace Monopoly.Tests
 {
     public class GameTests
     {
-        [Fact]
-        public void Test1()
-        {
+        private readonly Game subject;
 
+        public GameTests()
+        {
+            subject = new Game();
+        }
+
+        [Fact]
+        public void CanCreate()
+        {
         }
     }
 }
