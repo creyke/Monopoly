@@ -59,7 +59,7 @@ namespace Monopoly.Providers.Spaces
 
             for (int row = 2; row <= rowCount; row++)
             {
-                var space = new Space();
+                var space = new Space { Id = row - 2 };
                 for (int col = 1; col <= ColCount; col++)
                 {
                     if (columnMap.ContainsKey(col))
