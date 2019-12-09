@@ -19,7 +19,7 @@
   </ItemGroup>
 
   <ItemGroup>
-    <None Update="Data\Board.xlsx">
+    <None Update="TestData\BoardSpaces.xlsx">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
   </ItemGroup>

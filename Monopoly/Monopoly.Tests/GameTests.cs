@@ -1,5 +1,4 @@
-using Monopoly.Providers.Spaces;
-using System.Collections.Generic;
+using Monopoly.Tests.TestData;
 using System.Linq;
 using Xunit;
 
@@ -7,15 +6,7 @@ namespace Monopoly.Tests
 {
     public class GameTests
     {
-        private static readonly IEnumerable<Space> Spaces;
-
         private Game subject;
-
-        static GameTests() 
-        {
-            Spaces = new ExcelSpacesProvider("./Data/Board.xlsx")
-                .GetSpacesAsync().Result;
-        }
 
         private void CreateGame(int playerCount = 1)
         {
@@ -23,7 +14,7 @@ namespace Monopoly.Tests
                 .Range(0, playerCount)
                 .Select(x => x.ToString() );
 
-            subject = new Game(new Board(Spaces), playerNames);
+            subject = new Game(new Board(BoardSpacesTestData.Data), playerNames);
         }
 
         [Fact]
