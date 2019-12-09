@@ -1,4 +1,5 @@
-﻿using System.IO;
+﻿using Monopoly.Providers.Spaces;
+using System.Threading.Tasks;
 using Xunit;
 
 namespace Monopoly.Tests
@@ -6,10 +7,12 @@ namespace Monopoly.Tests
     public class BoardTests
     {
         [Fact]
-        public void CanLoadBoardFromFile()
+        public async Task CanLoadBoardFromFile()
         {
-            using var fileStream = new FileStream("./Data/Board.xlsx", FileMode.Open);
-            var board = new Board(fileStream);
+            var spaces = await new ExcelSpacesProvider("./Data/Board.xlsx").GetSpacesAsync();
+            var board = new Board(spaces);
+
+            Assert.NotNull(board.GoSpace);
         }
     }
 }
