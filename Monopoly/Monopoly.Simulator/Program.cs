@@ -12,7 +12,7 @@ namespace Monopoly.Simulator
             var provider = new ExcelSpacesProvider("BoardSpaces.xlsx");
             var spaces = await provider.GetSpacesAsync();
             var board = new Board(spaces);
-            var game = new Game(board, new string[] { "Roger", "CPU" });
+            var game = new Game(board, new string[] { "Roger", "CPU 1", "CPU 2", "CPU 3" });
 
             var dice = new Random();
 
