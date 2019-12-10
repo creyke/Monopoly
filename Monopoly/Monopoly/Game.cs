@@ -60,7 +60,7 @@ namespace Monopoly
                 else
                 {
                     GoToJail();
-                    ChangeToNextPlayer();
+                    return;
                 }
             }
 
@@ -73,6 +73,12 @@ namespace Monopoly
                 {
                     passedGo = true;
                 }
+            }
+
+            if (ActivePlayer.Location.Space.SpaceType == SpaceType.GoToJail)
+            {
+                GoToJail();
+                return;
             }
 
             if (passedGo)
@@ -94,6 +100,8 @@ namespace Monopoly
             {
                 ActivePlayer.Location = ActivePlayer.Location.Next;
             }
+
+            ChangeToNextPlayer();
         }
 
         private void ProcessLocation(Player player, SpaceState location)

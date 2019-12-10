@@ -109,6 +109,19 @@ namespace Monopoly.Tests
             Assert.Equal(SpaceType.Jail, firstPlayer.Location.Space.SpaceType);
         }
 
+        [Fact]
+        public void GoToJailIfLandOnGoToJailSquare()
+        {
+            CreateGame(2);
+
+            for (int i = 0; i < 5; i++)
+            {
+                subject.Roll(6, 4);
+            }
+
+            Assert.Equal(SpaceType.Jail, firstPlayer.Location.Space.SpaceType);
+        }
+
         // cannot purchase if not enough funds.
         // cannot purchase if not a property.
         // cannot purchase if already has owner.
