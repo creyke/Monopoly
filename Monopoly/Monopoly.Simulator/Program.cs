@@ -24,6 +24,13 @@ namespace Monopoly.Simulator
 
                 Console.WriteLine($"Player {player.Name} rolled {roll.Item1} + {roll.Item2} = {roll.Item1 + roll.Item2}...");
                 Console.WriteLine($"  Moved to {game.ActivePlayer.Location.Space.Name}. Balance {player.Balance}.");
+
+                if (game.ActivePlayerMoveOptions.Contains(MoveOption.Purchase))
+                {
+                    var property = game.ActivePlayer.Location.Space;
+                    Console.WriteLine($"  Purchasing {property.Name} for {property.Cost}...");
+                    game.PurchaseProperty();
+                }
             }
 
             var winner = game.Players.First(x => x.Balance > 0);
