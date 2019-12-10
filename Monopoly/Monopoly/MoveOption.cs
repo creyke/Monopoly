@@ -3,6 +3,7 @@
     public enum MoveOption
     {
         Roll,
-        Purchase
+        Purchase,
+        Pass
     }
 }

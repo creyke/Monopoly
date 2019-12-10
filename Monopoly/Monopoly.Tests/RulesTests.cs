@@ -43,21 +43,6 @@ namespace Monopoly.Tests
             Assert.Equal(exceptedSpaceId, subject.ActivePlayer.Location.Id);
         }
 
-        [Theory]
-        [InlineData(1, 1)]
-        [InlineData(2, 0)]
-        public void SwitchPlayerAfterRoll(int numRolls, int exceptedPlayerId)
-        {
-            CreateGame(2);
-
-            for (int i = 0; i < numRolls; i++)
-            {
-                subject.Roll(1, 1);
-            }
-
-            Assert.Equal(exceptedPlayerId, subject.ActivePlayer.Id);
-        }
-
         [Fact]
         public void PlayerLosesCacheOnFineSquare()
         {
@@ -98,6 +83,17 @@ namespace Monopoly.Tests
             SinglePlayerNavigateToFirstProperty();
 
             Assert.Contains(MoveOption.Purchase, subject.ActivePlayerMoveOptions);
+        }
+
+        [Fact]
+        public void CanRollAgainIfDouble()
+        {
+            CreateGame(2);
+
+            subject.Roll(1, 1);
+
+            Assert.Equal(firstPlayer.Id, subject.ActivePlayer.Id);
+            Assert.Contains(MoveOption.Roll, subject.ActivePlayerMoveOptions);
         }
 
         // cannot purchase if not enough funds.

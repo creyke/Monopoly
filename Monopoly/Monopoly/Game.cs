@@ -38,10 +38,10 @@ namespace Monopoly
 
         public void Roll(int firstDice, int secondDice)
         {
-            MoveActivePlayer(firstDice + secondDice);
+            MoveActivePlayer(firstDice + secondDice, firstDice == secondDice);
         }
 
-        private void MoveActivePlayer(int amount)
+        private void MoveActivePlayer(int amount, bool isDouble)
         {
             var passedGo = false;
 
@@ -60,6 +60,16 @@ namespace Monopoly
             }
 
             ProcessLocation(ActivePlayer, ActivePlayer.Location);
+
+            if (isDouble)
+            {
+                AddMoveOption(MoveOption.Roll);
+            }
+
+            if (!ActivePlayerMoveOptions.Any())
+            {
+                ChangeToNextPlayer();
+            }
         }
 
         private void ProcessLocation(Player player, SpaceState location)
@@ -73,18 +83,15 @@ namespace Monopoly
 
             if (IsPurchasable(location))
             {
-                ActivePlayerMoveOptions.Add(MoveOption.Purchase);
-            }
-            else
-            {
-                ChangeToNextPlayer();
+                AddMoveOption(MoveOption.Purchase, MoveOption.Pass);
             }
         }
 
-        private static bool IsPurchasable(SpaceState location)
+        private bool IsPurchasable(SpaceState location)
         {
             return PurchasableSpaceTypes.Contains(location.Space.SpaceType)
-                && location.Owner is null;
+                && location.Owner is null
+                && ActivePlayer.Balance >= location.Space.Cost;
         }
 
         private void CreditPlayer(Player player, int credit)
@@ -104,7 +111,18 @@ namespace Monopoly
 
             ActivePlayer = Players[nextPlayerId];
 
-            ActivePlayerMoveOptions.Add(MoveOption.Roll);
+            AddMoveOption(MoveOption.Roll);
+        }
+
+        private void AddMoveOption(params MoveOption[] options)
+        {
+            foreach (var option in options)
+            {
+                if (!ActivePlayerMoveOptions.Contains(option))
+                {
+                    ActivePlayerMoveOptions.Add(option);
+                }
+            }
         }
 
         public void PurchaseProperty()
