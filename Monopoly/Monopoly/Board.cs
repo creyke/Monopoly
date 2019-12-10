@@ -6,28 +6,36 @@ namespace Monopoly
     {
         public Board(IEnumerable<Space> spaces)
         {
-            Space previousSpace = null;
+            SpaceState previousSpace = null;
+
+            var spaceId = 0;
 
             foreach (var space in spaces)
             {
+                var state = new SpaceState
+                {
+                    Id = spaceId++,
+                    Space = space
+                };
+
                 if (previousSpace is null)
                 {
-                    GoSpace = space;
+                    GoSpace = state;
                 }
                 else
                 {
-                    previousSpace.Next = space;
+                    previousSpace.Next = state;
                 }
 
-                space.Previous = previousSpace;
+                state.Previous = previousSpace;
 
-                previousSpace = space;
+                previousSpace = state;
             }
-                
+            
             previousSpace.Next = GoSpace;
             GoSpace.Previous = previousSpace;
         }
 
-        public Space GoSpace { get; }
+        public SpaceState GoSpace { get; }
     }
 }

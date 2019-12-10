@@ -7,7 +7,8 @@ namespace Monopoly.Tests
     public class RulesTests
     {
         private Game subject;
-        private int player1StartingBalance;
+        private Player firstPlayer;
+        private int firstPlayerStartingBalance;
 
         private void CreateGame(int playerCount = 1)
         {
@@ -17,7 +18,8 @@ namespace Monopoly.Tests
 
             subject = new Game(new Board(BoardSpacesTestData.Data), playerNames);
 
-            player1StartingBalance = subject.Players.First().Balance;
+            firstPlayer = subject.Players.First();
+            firstPlayerStartingBalance = firstPlayer.Balance;
         }
 
         [Fact]
@@ -63,7 +65,7 @@ namespace Monopoly.Tests
 
             subject.Roll(2, 2);
 
-            Assert.Equal(player1StartingBalance -= 1000000, subject.ActivePlayer.Balance);
+            Assert.Equal(firstPlayerStartingBalance -= 1000000, subject.ActivePlayer.Balance);
         }
 
         [Fact]
@@ -73,7 +75,19 @@ namespace Monopoly.Tests
 
             SinglePlayerNavigateBoardOnceNoCosts();
 
-            Assert.Equal(player1StartingBalance + 2000000, subject.ActivePlayer.Balance);
+            Assert.Equal(firstPlayerStartingBalance + 2000000, subject.ActivePlayer.Balance);
+        }
+
+        [Fact]
+        public void CanPurchaseProperty()
+        {
+            CreateGame();
+
+            subject.Roll(1, 2);
+
+            subject.PurchaseProperty();
+
+            Assert.Equal(firstPlayerStartingBalance - firstPlayer.Location.Space.Cost, firstPlayer.Balance);
         }
 
         private void SinglePlayerNavigateBoardOnceNoCosts()

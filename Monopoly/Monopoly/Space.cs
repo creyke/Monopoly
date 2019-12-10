@@ -4,7 +4,6 @@ namespace Monopoly
 {
     public class Space
     {
-        public int Id { get; set; }
         public string Name { get; set; }
         public SpaceType SpaceType { get; set; }
         public string PropertyGroup { get; set; }
@@ -16,8 +15,6 @@ namespace Monopoly
         public int Rent4Apt { get; set; }
         public int RentHotel { get; set; }
         public int CostPerApt { get; set; }
-        public Space Previous { get; set; }
-        public Space Next { get; set; }
 
         public override string ToString()
         {
