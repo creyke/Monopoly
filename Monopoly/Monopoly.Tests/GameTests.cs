@@ -7,20 +7,25 @@ namespace Monopoly.Tests
     public class GameTests
     {
         private Game subject;
+        private int player1StartingBalance;
 
         private void CreateGame(int playerCount = 1)
         {
             var playerNames = Enumerable
                 .Range(0, playerCount)
-                .Select(x => x.ToString() );
+                .Select(x => x.ToString());
 
             subject = new Game(new Board(BoardSpacesTestData.Data), playerNames);
+
+            player1StartingBalance = subject.Players.First().Balance;
         }
 
         [Fact]
         public void CanCreate()
         {
             CreateGame();
+
+            Assert.Equal(15000000, subject.ActivePlayer.Balance);
         }
 
         [Theory]
@@ -31,11 +36,9 @@ namespace Monopoly.Tests
         {
             CreateGame();
 
-            var player = subject.ActivePlayer;
-
             subject.Roll(firstDice, secondDice);
 
-            Assert.Equal(exceptedSpaceId, player.Location.Id);
+            Assert.Equal(exceptedSpaceId, subject.ActivePlayer.Location.Id);
         }
 
         [Theory]
@@ -51,6 +54,35 @@ namespace Monopoly.Tests
             }
 
             Assert.Equal(exceptedPlayerId, subject.ActivePlayer.Id);
+        }
+
+        [Fact]
+        public void PlayerLosesCacheOnFineSquare()
+        {
+            CreateGame();
+
+            subject.Roll(2, 2);
+
+            Assert.Equal(player1StartingBalance -= 1000000, subject.ActivePlayer.Balance);
+        }
+
+        [Fact]
+        public void IfPlayerPassesGoCredit2Million()
+        {
+            CreateGame();
+
+            SinglePlayerNavigateBoardOnceNoCosts();
+
+            Assert.Equal(player1StartingBalance + 2000000, subject.ActivePlayer.Balance);
+        }
+
+        private void SinglePlayerNavigateBoardOnceNoCosts()
+        {
+            subject.Roll(4, 6);
+            subject.Roll(4, 6);
+            subject.Roll(4, 4);
+            subject.Roll(3, 4);
+            subject.Roll(3, 2);
         }
     }
 }
