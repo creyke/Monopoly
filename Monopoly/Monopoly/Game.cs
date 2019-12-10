@@ -161,21 +161,6 @@ namespace Monopoly
         {
             var property = ActivePlayer.Location;
 
-            if (property.Space.SpaceType != SpaceType.Property)
-            {
-                return;
-            }
-
-            if (property.Owner != null)
-            {
-                throw new Exception("Property already has an owner.");
-            }
-
-            if (ActivePlayer.Balance < property.Space.Cost)
-            {
-                throw new Exception("Cannot afford purchase.");
-            }
-
             DebitPlayer(ActivePlayer, property.Space.Cost);
 
             property.Owner = ActivePlayer;
