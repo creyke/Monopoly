@@ -4,7 +4,7 @@ using Xunit;
 
 namespace Monopoly.Tests
 {
-    public class GameTests
+    public class RulesTests
     {
         private Game subject;
         private int player1StartingBalance;
