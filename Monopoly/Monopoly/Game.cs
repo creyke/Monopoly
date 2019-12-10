@@ -13,8 +13,12 @@ namespace Monopoly
 
         public Board Board { get; }
         public Player[] Players { get; }
+        
         public Player ActivePlayer { get; private set; }
+
+        // TODO: Put in "Turn" object and just recreate each time?
         public List<MoveOption> ActivePlayerMoveOptions { get; }
+        private int activeNumDoubles;
 
         public Game(Board board, IEnumerable<string> playerNames)
         {
@@ -38,11 +42,28 @@ namespace Monopoly
 
         public void Roll(int firstDice, int secondDice)
         {
+            ActivePlayerMoveOptions.Clear();
+
             MoveActivePlayer(firstDice + secondDice, firstDice == secondDice);
         }
 
         private void MoveActivePlayer(int amount, bool isDouble)
         {
+            if (isDouble)
+            {
+                activeNumDoubles++;
+
+                if (activeNumDoubles < 3)
+                {
+                    AddMoveOption(MoveOption.Roll);
+                }
+                else
+                {
+                    GoToJail();
+                    ChangeToNextPlayer();
+                }
+            }
+
             var passedGo = false;
 
             for (int i = 0; i < amount; i++)
@@ -61,21 +82,22 @@ namespace Monopoly
 
             ProcessLocation(ActivePlayer, ActivePlayer.Location);
 
-            if (isDouble)
-            {
-                AddMoveOption(MoveOption.Roll);
-            }
-
             if (!ActivePlayerMoveOptions.Any())
             {
                 ChangeToNextPlayer();
             }
         }
 
+        private void GoToJail()
+        {
+            while (ActivePlayer.Location.Space.SpaceType != SpaceType.Jail)
+            {
+                ActivePlayer.Location = ActivePlayer.Location.Next;
+            }
+        }
+
         private void ProcessLocation(Player player, SpaceState location)
         {
-            ActivePlayerMoveOptions.Clear();
-
             if (location.Space.Fine > 0)
             {
                 DebitPlayer(player, location.Space.Fine);
@@ -110,6 +132,8 @@ namespace Monopoly
                 ? ActivePlayer.Id + 1 : 0;
 
             ActivePlayer = Players[nextPlayerId];
+
+            activeNumDoubles = 0;
 
             AddMoveOption(MoveOption.Roll);
         }

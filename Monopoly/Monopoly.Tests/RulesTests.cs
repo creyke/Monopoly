@@ -96,6 +96,19 @@ namespace Monopoly.Tests
             Assert.Contains(MoveOption.Roll, subject.ActivePlayerMoveOptions);
         }
 
+        [Fact]
+        public void GoToJailIf3DoublesInRow()
+        {
+            CreateGame(2);
+
+            for (int i = 0; i < 3; i++)
+            {
+                subject.Roll(1, 1);
+            }
+
+            Assert.Equal(SpaceType.Jail, firstPlayer.Location.Space.SpaceType);
+        }
+
         // cannot purchase if not enough funds.
         // cannot purchase if not a property.
         // cannot purchase if already has owner.
