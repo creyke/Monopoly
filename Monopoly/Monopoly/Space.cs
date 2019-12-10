@@ -6,7 +6,7 @@ namespace Monopoly
     {
         public int Id { get; set; }
         public string Name { get; set; }
-        public string Type { get; set; }
+        public SpaceType SpaceType { get; set; }
         public string PropertyGroup { get; set; }
         public int Fine { get; set; }
         public int Cost { get; set; }

@@ -1,4 +1,5 @@
 ﻿using OfficeOpenXml;
+using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
@@ -27,7 +28,7 @@ namespace Monopoly.Providers.Spaces
             var properties = new string[]
             {
                     nameof(Space.Name),
-                    nameof(Space.Type),
+                    nameof(Space.SpaceType),
                     nameof(Space.PropertyGroup),
                     nameof(Space.Fine),
                     nameof(Space.Cost),
@@ -70,8 +71,9 @@ namespace Monopoly.Providers.Spaces
                             case nameof(Space.Name):
                                 space.Name = raw;
                                 break;
-                            case nameof(Space.Type):
-                                space.Type = raw;
+                            case nameof(Space.SpaceType):
+                                Enum.TryParse(raw, out SpaceType spaceType);
+                                space.SpaceType = spaceType;
                                 break;
                             case nameof(Space.PropertyGroup):
                                 space.PropertyGroup = raw;

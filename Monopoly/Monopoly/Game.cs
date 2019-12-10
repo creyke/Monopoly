@@ -41,7 +41,7 @@ namespace Monopoly
             for (int i = 0; i < amount; i++)
             {
                 ActivePlayer.Location = ActivePlayer.Location.Next;
-                if (!passedGo && ActivePlayer.Location.Type == "Go")
+                if (!passedGo && ActivePlayer.Location.SpaceType == SpaceType.Go)
                 {
                     passedGo = true;
                 }
