@@ -6,9 +6,15 @@ namespace Monopoly
 {
     public class Game
     {
+        private static readonly SpaceType[] PurchasableSpaceTypes = new SpaceType[]
+        {
+            SpaceType.Property, SpaceType.Airport, SpaceType.Utility
+        };
+
         public Board Board { get; }
         public Player[] Players { get; }
         public Player ActivePlayer { get; private set; }
+        public List<MoveOption> ActivePlayerMoveOptions { get; }
 
         public Game(Board board, IEnumerable<string> playerNames)
         {
@@ -26,13 +32,13 @@ namespace Monopoly
                 .ToArray();
 
             ActivePlayer = Players.First();
+
+            ActivePlayerMoveOptions = new List<MoveOption> { MoveOption.Roll };
         }
 
         public void Roll(int firstDice, int secondDice)
         {
             MoveActivePlayer(firstDice + secondDice);
-
-            ChangeToNextPlayer();
         }
 
         private void MoveActivePlayer(int amount)
@@ -58,10 +64,27 @@ namespace Monopoly
 
         private void ProcessLocation(Player player, SpaceState location)
         {
+            ActivePlayerMoveOptions.Clear();
+
             if (location.Space.Fine > 0)
             {
                 DebitPlayer(player, location.Space.Fine);
             }
+
+            if (IsPurchasable(location))
+            {
+                ActivePlayerMoveOptions.Add(MoveOption.Purchase);
+            }
+            else
+            {
+                ChangeToNextPlayer();
+            }
+        }
+
+        private static bool IsPurchasable(SpaceState location)
+        {
+            return PurchasableSpaceTypes.Contains(location.Space.SpaceType)
+                && location.Owner is null;
         }
 
         private void CreditPlayer(Player player, int credit)
@@ -80,6 +103,8 @@ namespace Monopoly
                 ? ActivePlayer.Id + 1 : 0;
 
             ActivePlayer = Players[nextPlayerId];
+
+            ActivePlayerMoveOptions.Add(MoveOption.Roll);
         }
 
         public void PurchaseProperty()

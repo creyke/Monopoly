@@ -83,12 +83,27 @@ namespace Monopoly.Tests
         {
             CreateGame();
 
-            subject.Roll(1, 2);
+            SinglePlayerNavigateToFirstProperty();
 
             subject.PurchaseProperty();
 
             Assert.Equal(firstPlayerStartingBalance - firstPlayer.Location.Space.Cost, firstPlayer.Balance);
         }
+
+        [Fact]
+        public void CanCheckIfPropertyIsAvailable()
+        {
+            CreateGame();
+
+            SinglePlayerNavigateToFirstProperty();
+
+            Assert.Contains(MoveOption.Purchase, subject.ActivePlayerMoveOptions);
+        }
+
+        // cannot purchase if not enough funds.
+        // cannot purchase if not a property.
+        // cannot purchase if already has owner.
+        // can check if property available.
 
         private void SinglePlayerNavigateBoardOnceNoCosts()
         {
@@ -97,6 +112,11 @@ namespace Monopoly.Tests
             subject.Roll(4, 4);
             subject.Roll(3, 4);
             subject.Roll(3, 2);
+        }
+
+        private void SinglePlayerNavigateToFirstProperty()
+        {
+            subject.Roll(1, 2);
         }
     }
 }
