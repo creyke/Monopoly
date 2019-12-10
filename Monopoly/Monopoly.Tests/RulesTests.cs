@@ -107,6 +107,7 @@ namespace Monopoly.Tests
             }
 
             Assert.Equal(SpaceType.Jail, firstPlayer.Location.Space.SpaceType);
+            Assert.Equal(1, subject.ActivePlayer.Id);
         }
 
         [Fact]
@@ -120,6 +121,7 @@ namespace Monopoly.Tests
             }
 
             Assert.Equal(SpaceType.Jail, firstPlayer.Location.Space.SpaceType);
+            Assert.Equal(1, subject.ActivePlayer.Id);
         }
 
         // cannot purchase if not enough funds.
